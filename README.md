@@ -1,8 +1,8 @@
-#Baz Compiler
+# Baz Compiler
 
 This project is my Homework 1 in OSS class
 
-##Test Environment
+## Test Environment
 OS : Ubuntu 16.04
 
 JAVA Version : 1.8.0_144
@@ -11,13 +11,13 @@ Test C Compiler : GNU GCC
 
 IDE : IntelliJ IDEA 2017.2.3
 
-##Excution Example
+## Excution Example
 ```
 java BazCompiler.class ./Test.baz ./Test.c
 ```
 
 
-##Explanation
+## Explanation
 
 프로그램 실행시 아규먼트로 입력 파일 위치과 출력 파일 위치를 입력해 주어야합니다.
 
@@ -43,5 +43,5 @@ YOU ARE WRONG!
 
 Process finished with exit code 0
 ```
-##Reference
+## Reference
 http://esolangs.org/wiki/Baz
