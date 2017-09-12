@@ -1,6 +1,9 @@
-x = true
-if x
-show true
+x / baz
+get y
+if y
+show baz
 endif
-show x
+if! y
+show false
+endif
 end
