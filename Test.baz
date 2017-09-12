@@ -1,9 +1,2 @@
-x / baz
-get y
-if y
-show baz
-endif
-if! y
-show false
-endif
+show x
 end

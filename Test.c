@@ -1,5 +1,5 @@
 #include <stdio.h>
 int main(){
-	printf("YOU ARE WRONG!\n");
-	return 0;
+printf("YOU ARE WRONG!\n");
+return 0;
 }

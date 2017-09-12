@@ -52,12 +52,13 @@ public class BazCompiler {
 
         writer.write("int main(){\n");
         writer.write("\tsrand(time(NULL));\n");
+        writer.write("\tint temp = 0;\n");
 
         // Convert baz to c
-        String line;
-        HashMap<String, String> map = new HashMap<>();
+        Stack<String> stack = new Stack<>();
         boolean indent = false;
-        writer.write("\tint temp = 0;\n");
+        int scopeCount = 0;
+        String line;
 
         while (true) {
             line = scan.nextLine();
@@ -71,15 +72,16 @@ public class BazCompiler {
 
                 if (firstToken.equals("show")) {
                     String variable = stringTokenizer.nextToken();
-                    if (map.containsKey(variable) || isBazVariable(variable)) {
+                    if (stack.contains(variable) || isBazVariable(variable)) {
                         writer.write("baz_print(" + variable + ");\n");
                     } else {
                         Error(writer, output);
                     }
                 } else if (firstToken.equals("get")) {
                     String variable = stringTokenizer.nextToken();
-                    if (!map.containsKey(variable)) {
-                        map.put(variable, variable);
+                    if (!stack.contains(variable)) {
+                        scopeCount = indent ? ++scopeCount : scopeCount;
+                        stack.push(variable);
                         writer.write("enum baz_val " + variable + ";\n");
                         writer.write("baz_input(&" + variable + ");\n");
                     } else {
@@ -108,6 +110,9 @@ public class BazCompiler {
                         Error(writer, output);
                     }
                     indent = false;
+                    for (int i = 0; i < scopeCount; i++) {
+                        stack.pop();
+                    }
                     writer.write("}\n");
                 } else if (firstToken.equals("end")) {
                     writer.write("return 1;\n");
@@ -121,8 +126,8 @@ public class BazCompiler {
                 if (!equal.equals("="))
                     Error(writer, output);
                 String variable = stringTokenizer.nextToken();
-                if (!map.containsKey(variable) && isBazVariable(variable)) {
-                    map.put(firstToken, firstToken);
+                if (!stack.contains(variable) && isBazVariable(variable)) {
+                    stack.push(firstToken);
                     writer.write("\tenum baz_val " + firstToken + " = " + variable + ";\n");
                 } else {
                     Error(writer, output);
@@ -141,19 +146,20 @@ public class BazCompiler {
 
     }
 
+    // 올바른 변수인지 확인하는 용도 - 대소문자 구분하여 소문자만 가능
     private static boolean isBazVariable(String variable) {
         return variable.equals("true") || variable.equals("false") || variable.equals("baz");
     }
 
-
+    // 컴파일 중  문법에 맞지 않으면 에러 메시지와 함께 c 파일에세
     private static void Error(BufferedWriter writer, File output) throws IOException {
         System.out.println("YOU ARE WRONG!");
         writer.close();
         writer = new BufferedWriter(new FileWriter(output));
         writer.write("#include <stdio.h>\n");
         writer.write("int main(){\n");
-        writer.write("\tprintf(\"YOU ARE WRONG!\\n\");\n");
-        writer.write("\treturn 0;\n");
+        writer.write("printf(\"YOU ARE WRONG!\\n\");\n");
+        writer.write("return 0;\n");
         writer.write("}");
         writer.flush();
         System.exit(0);
