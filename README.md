@@ -1,6 +1,6 @@
 # Baz Compiler
 
-This project is my Homework 1 in OSS class
+This project is my Homework 1 in Compiler class
 
 ## Test Environment
 OS : Ubuntu 16.04
